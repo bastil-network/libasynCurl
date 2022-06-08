@@ -35,7 +35,8 @@ abstract class CurlTask extends AsyncTask
         $this->headers = $serialized_headers;
 
         if ($closure !== null) {
-            Utils::validateCallableSignature(function (?InternetRequestResult $result): void {}, $closure);
+            Utils::validateCallableSignature(function (?InternetRequestResult $result): void {
+            }, $closure);
             $this->storeLocal('closure', $closure);
         }
     }

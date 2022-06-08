@@ -48,22 +48,22 @@ class Curl
         return self::$registered;
     }
 
-    protected function buildHeaders(array $headers): array
+    protected static function buildHeaders(array $headers): array
     {
         return array_merge($headers, self::$defaultHeaders);
     }
 
-    public static function postRequest(string $page, array|string $args, Closure $closure = null, array $headers = [],  int $timeout = 10): void
+    public static function postRequest(string $page, array|string $args, Closure $closure = null, array $headers = [], int $timeout = 10): void
     {
         self::$threadPool->submitTask(new CurlPostTask($page, $args, $timeout, self::buildHeaders($headers), $closure));
     }
 
-    public static function deleteRequest(string $page, array|string $args, Closure $closure = null, array $headers = [],  int $timeout = 10): void
+    public static function deleteRequest(string $page, array|string $args, Closure $closure = null, array $headers = [], int $timeout = 10): void
     {
-        self::$threadPool->submitTask(new CurlDeleteTask($page, $args, $timeout,  self::buildHeaders($headers), $closure));
+        self::$threadPool->submitTask(new CurlDeleteTask($page, $args, $timeout, self::buildHeaders($headers), $closure));
     }
 
-    public static function getRequest(string $page, array|string $args, Closure $closure = null, array $headers = [],  int $timeout = 10): void
+    public static function getRequest(string $page, array|string $args, Closure $closure = null, array $headers = [], int $timeout = 10): void
     {
         self::$threadPool->submitTask(new CurlGetTask($page, $timeout, self::buildHeaders($headers), $closure));
     }
