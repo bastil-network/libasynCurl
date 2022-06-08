@@ -21,8 +21,9 @@ class Curl
     private static bool $registered = false;
     /** @var CurlThreadPool */
     private static CurlThreadPool $threadPool;
+    private static array $defaultHeaders;
 
-    public static function register(PluginBase $plugin): void
+    public static function register(PluginBase $plugin, array $defaultHeaders = []): void
     {
         if (self::isRegistered()) {
             throw new InvalidArgumentException("{$plugin->getName()} attempted to register " . self::class . " twice.");
@@ -39,6 +40,7 @@ class Curl
         }), CurlThreadPool::GARBAGE_COLLECT_INTERVAL);
 
         self::$registered = true;
+        self::$defaultHeaders = $defaultHeaders;
     }
 
     public static function isRegistered(): bool
@@ -46,18 +48,23 @@ class Curl
         return self::$registered;
     }
 
-    public static function postRequest(string $page, array|string $args, int $timeout = 10, array $headers = [], Closure $closure = null): void
+    protected function buildHeaders(array $headers): array
     {
-        self::$threadPool->submitTask(new CurlPostTask($page, $args, $timeout, $headers, $closure));
+        return array_merge($headers, self::$defaultHeaders);
     }
 
-    public static function deleteRequest(string $page, array|string $args, int $timeout = 10, array $headers = [], Closure $closure = null): void
+    public static function postRequest(string $page, array|string $args, Closure $closure = null, array $headers = [],  int $timeout = 10): void
     {
-        self::$threadPool->submitTask(new CurlDeleteTask($page, $args, $timeout, $headers, $closure));
+        self::$threadPool->submitTask(new CurlPostTask($page, $args, $timeout, self::buildHeaders($headers), $closure));
     }
 
-    public static function getRequest(string $page, int $timeout = 10, array $headers = [], Closure $closure = null): void
+    public static function deleteRequest(string $page, array|string $args, Closure $closure = null, array $headers = [],  int $timeout = 10): void
     {
-        self::$threadPool->submitTask(new CurlGetTask($page, $timeout, $headers, $closure));
+        self::$threadPool->submitTask(new CurlDeleteTask($page, $args, $timeout,  self::buildHeaders($headers), $closure));
+    }
+
+    public static function getRequest(string $page, array|string $args, Closure $closure = null, array $headers = [],  int $timeout = 10): void
+    {
+        self::$threadPool->submitTask(new CurlGetTask($page, $timeout, self::buildHeaders($headers), $closure));
     }
 }
