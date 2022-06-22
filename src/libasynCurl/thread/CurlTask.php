@@ -32,6 +32,7 @@ abstract class CurlTask extends AsyncTask
         if ($serialized_headers === null) {
             throw new InvalidArgumentException("Headers cannot be serialized");
         }
+
         $this->headers = $serialized_headers;
 
         if ($closure !== null) {

@@ -2,5 +2,5 @@ name: libasynCurl
 description: An async Curl library for PocketMine-MP
 version: 1.0.0
 antigen: libasynCurl
-authors: [NetherGamesMC]
+authors: [ NetherGamesMC ]
 api: 4.0.0
