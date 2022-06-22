@@ -1,6 +1,6 @@
 <?php
 
-namespace libasynCurl\src\test;
+namespace mzztin\test;
 
 use libasynCurl\Curl;
 use pocketmine\plugin\PluginBase;
