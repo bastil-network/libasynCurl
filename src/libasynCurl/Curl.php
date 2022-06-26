@@ -60,6 +60,11 @@ class Curl
         self::$threadPool->submitTask(new CurlPostTask(self::$defaultUrl . $page, $args, $timeout, self::buildHeaders($headers), $closure));
     }
 
+    public static function putRequest(string $page, array|string $args = "", Closure $closure = null, array $headers = [], int $timeout = 10): void
+    {
+        self::$threadPool->submitTask(new CurlPostTask(self::$defaultUrl . $page, $args, $timeout, self::buildHeaders($headers), $closure));
+    }
+
     public static function deleteRequest(string $page, array|string $args = "", Closure $closure = null, array $headers = [], int $timeout = 10): void
     {
         self::$threadPool->submitTask(new CurlDeleteTask(self::$defaultUrl . $page, $args, $timeout, self::buildHeaders($headers), $closure));
